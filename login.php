@@ -1,5 +1,9 @@
 <?php 
 
+	require("../../config.php");
+	
+	echo $serverPassword;
+
 	//var_dump($_GET);
 	
 	//echo "<br>";
@@ -61,6 +65,52 @@
 		}
 		
 	} 
+	
+	
+	
+	
+		if ($signupEmailError == "*" AND 
+		 $signupPasswordError == "*" &&
+		 isset($_POST["signupEmail"])&&
+		 isset($_POST["signupPassword"])
+			
+			) 
+			{
+		
+		//vigu ei olnud, k]ik on olemas
+		echo "Salvestan...<br>";
+		echo "email ".$signupEmail. "<br>";
+		echo "parool  ".$_POST["signupPassword"]."<br>";
+		
+		$password = hash("sha512", $_POST["signupPassword"]);
+		
+		echo $password;
+		
+		//loon ühenduse
+		
+		$database = "if16_kirikotk_4";
+		$mysqli = new mysqli($serverHost, $serverUsername, $serverPassword, $database);
+		
+		$stmt = $mysqli->prepare("INSERT INTO user_sample (email, password) VALUE (?, ?)");
+		
+		echo $mysqli->error;
+		
+		//asendan küsimärgig
+		//iga märgi kohta tuleb lisada üks täht - mis tüüpi muutuja on
+		// s - string
+		// i - int
+		// d - double
+		$stmt->bind_param("ss", $signupEmail, $password);
+		
+		//täida käsku
+		if($stmt->execute() ) {
+			echo "õnnestus";
+			} else {
+				echo "ERROR ".$stmt->error;
+			}
+		}
+		
+		
 	
 ?>
 
