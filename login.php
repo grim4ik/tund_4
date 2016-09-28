@@ -1,16 +1,15 @@
 <?php 
-
-	require("../../config.php");
 	
-	echo $serverPassword;
-
+	require("../../config.php");
+	require("functions.php");
+	
 	//var_dump($_GET);
 	
 	//echo "<br>";
 	
 	//var_dump($_POST);
 	
-	//MUTUJAD
+	//MUUTUJAD
 	$signupEmailError = "*";
 	$signupEmail = "";
 	
@@ -26,11 +25,12 @@
 			$signupEmailError = "* Väli on kohustuslik!";
 			
 		} else {
-			//email on olemas õige
+			// email on olemas ja õige
 			$signupEmail = $_POST["signupEmail"];
+			
 		}
 		
-	}
+	} 
 	
 	$signupPasswordError = "*";
 	
@@ -69,51 +69,28 @@
 	
 	
 	
-		if ($signupEmailError == "*" AND 
+	if ( $signupEmailError == "*" AND
 		 $signupPasswordError == "*" &&
-		 isset($_POST["signupEmail"])&&
-		 isset($_POST["signupPassword"])
-			
-			) 
-			{
+		 isset($_POST["signupEmail"]) && 
+		 isset($_POST["signupPassword"]) 
+	  ) {
 		
-		//vigu ei olnud, k]ik on olemas
+		//vigu ei olnud, kõik on olemas	
 		echo "Salvestan...<br>";
-		echo "email ".$signupEmail. "<br>";
-		echo "parool  ".$_POST["signupPassword"]."<br>";
+		echo "email ".$signupEmail."<br>";
+		echo "parool ".$_POST["signupPassword"]."<br>";
 		
 		$password = hash("sha512", $_POST["signupPassword"]);
 		
-		echo $password;
+		echo $password."<br>";
 		
-		//loon ühenduse
-		
-		$database = "if16_kirikotk_4";
-		$mysqli = new mysqli($serverHost, $serverUsername, $serverPassword, $database);
-		
-		$stmt = $mysqli->prepare("INSERT INTO user_sample (email, password) VALUE (?, ?)");
-		
-		echo $mysqli->error;
-		
-		//asendan küsimärgig
-		//iga märgi kohta tuleb lisada üks täht - mis tüüpi muutuja on
-		// s - string
-		// i - int
-		// d - double
-		$stmt->bind_param("ss", $signupEmail, $password);
-		
-		//täida käsku
-		if($stmt->execute() ) {
-			echo "õnnestus";
-			} else {
-				echo "ERROR ".$stmt->error;
-			}
-		}
+		signup($signupEmail, $password);
 		
 		
+	}
+	
 	
 ?>
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -125,7 +102,8 @@
 		
 		<form method="POST" >
 			
-			<input name="loginEmail" placeholder="E-post" type="email">
+			<label>E-post</label><br>
+			<input name="loginEmail" type="email">
 			
 			<br><br>
 
@@ -145,12 +123,11 @@
 			<input name="signupEmail" type="email" value="<?=$signupEmail;?>"> <?php echo $signupEmailError; ?>
 			
 			<br><br>
-            
-			<label>Parool</label><br>
-			<input name="signupPassword" type="password"> <?php echo $signupPasswordError; ?>
+
+			<input name="signupPassword" placeholder="Parool" type="password"> <?php echo $signupPasswordError; ?>
 			
 			<br><br>
-
+					
 			<?php if ($gender == "female") { ?>
 				<input type="radio" name="gender" value="female" checked> female<br>
 			<?php } else { ?>
@@ -169,13 +146,10 @@
 			<?php } else { ?>
 				<input type="radio" name="gender" value="other" > other<br>
 			<?php } ?>
-
-			<br><br>
 			
 			<input type="submit" value="Loo kasutaja">
 		
 		</form>
-		
 
 	</body>
 </html>
