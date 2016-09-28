@@ -145,7 +145,7 @@
 				<input type="radio" name="gender" value="other" checked> other<br>
 			<?php } else { ?>
 				<input type="radio" name="gender" value="other" > other<br>
-			<?php } ?>
+			<?php } ?><br>
 			
 			<input type="submit" value="Loo kasutaja">
 		
