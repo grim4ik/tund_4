@@ -1,10 +1,12 @@
 <?php 
+	var_dump($_POST);
+	var_dump(isset($_POST["signupEmail"]));
 	
-	require("../../config.php");
+	
 	require("functions.php");
 	
-	//kui ei ole sisseloginud siis suunan data lehele
-	if (isset($_SESSION["userID"])) {
+	// kui on sisseloginud siis suunan data lehele
+	if (isset($_SESSION["userId"])) {
 		header("Location: data.php");
 	}
 	
@@ -57,6 +59,15 @@
 			
 		}
 		
+		/* GENDER */
+		
+		if (!isset ($_POST["gender"])) {
+			
+			//error
+		}else {
+			// annad väärtuse
+		}
+		
 	}
 	
 	//vaikimisi väärtus
@@ -93,17 +104,18 @@
 		
 		
 	}
+	
 	$notice = "";
-	//kas kasutaja tahab siise logida
-	if ( isset($_POST["loginEmail"]) &&
-		isset($_POST["loginPassword"]) &&
-		!empty($_POST["loginEmail"]) &&
-		!empty($_POST["loginPassword"])
-			) {
-				$notice = login($_POST["loginEmail"],$_POST["loginPassword"]);
-			}
-	
-	
+	//kas kasutaja tahab sisse logida
+	if ( isset($_POST["loginEmail"]) && 
+		 isset($_POST["loginPassword"]) && 
+		 !empty($_POST["loginEmail"]) &&
+		 !empty($_POST["loginPassword"]) 
+	) {
+		
+		$notice = login($_POST["loginEmail"], $_POST["loginPassword"]);
+		
+	}
 ?>
 <!DOCTYPE html>
 <html>
@@ -159,7 +171,7 @@
 				<input type="radio" name="gender" value="other" checked> other<br>
 			<?php } else { ?>
 				<input type="radio" name="gender" value="other" > other<br>
-			<?php } ?><br>
+			<?php } ?>
 			
 			<input type="submit" value="Loo kasutaja">
 		
@@ -167,4 +179,3 @@
 
 	</body>
 </html>
-

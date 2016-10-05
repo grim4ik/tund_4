@@ -1,8 +1,9 @@
 <?php 
-
-	// see fail peab olema siis seotud kõigiga 
-	//kus tahame sessiooni kasutada
-	//saab kasutada nüüd $_SESSION muutujat
+	require("../../config.php");
+	
+	// see fail peab olema siis seotud kÃµigiga kus
+	// tahame sessiooni kasutada
+	// saab kasutada nÃ¼Ã¼d $_SESSION muutujat
 	session_start();
 	
 	$database = "if16_kirikotk_4";
@@ -18,7 +19,7 @@
 		$stmt->bind_param("ss", $email, $password);
 		
 		if ( $stmt->execute() ) {
-			echo "õnnestus";
+			echo "Ãµnnestus";
 		} else {
 			echo "ERROR ".$stmt->error;
 		}
@@ -39,17 +40,17 @@
 		
 		echo $mysqli->error;
 		
-		//asendan küsimärgi
+		//asendan kÃ¼simÃ¤rgi
 		$stmt->bind_param("s", $email);
 		
-		//rea kohta tulba väärtus
+		//rea kohta tulba vÃ¤Ã¤rtus
 		$stmt->bind_result($id, $emailFromDb, $passwordFromDb, $created);
 		
 		$stmt->execute();
 		
 		//ainult SELECT'i puhul
 		if($stmt->fetch()) {
-			// oli olemas, rida käes
+			// oli olemas, rida kÃ¤es
 			//kasutaja sisestas sisselogimiseks
 			$hash = hash("sha512", $password);
 			
@@ -62,7 +63,6 @@
 				
 				header("Location: data.php");
 				
-				
 			} else {
 				$notice = "parool vale";
 			}
@@ -70,15 +70,40 @@
 			
 		} else {
 			
-			//ei olnud ühtegi rida
+			//ei olnud Ã¼htegi rida
 			$notice = "Sellise emailiga ".$email." kasutajat ei ole olemas";
 		}
+		
+		
+		$stmt->close();
+		$mysqli->close();
 		
 		return $notice;
 		
 		
+		
+		
+		
 	}
 	
+	
+	
+	function saveEvent($age, $color) {
+		
+		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+		
+		$stmt = $mysqli->prepare("INSERT INTO whistle (age, color) VALUE (?, ?)");
+		echo $mysqli->error;
+		
+		$stmt->bind_param("is", $age, $color);
+		
+		if ( $stmt->execute() ) {
+			echo "Ãµnnestus";
+		} else {
+			echo "ERROR ".$stmt->error;
+		}
+		
+	}
 	
 	
 	
