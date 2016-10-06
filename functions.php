@@ -92,7 +92,7 @@
 		
 		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
 		
-		$stmt = $mysqli->prepare("INSERT INTO whistle (age, color) VALUE (?, ?)");
+		$stmt = $mysqli->prepare("INSERT INTO Iventlog (age, color) VALUE (?, ?)");
 		echo $mysqli->error;
 		
 		$stmt->bind_param("is", $age, $color);
@@ -102,6 +102,38 @@
 		} else {
 			echo "ERROR ".$stmt->error;
 		}
+		
+	}
+	
+	
+	function getAllPeople() {
+		
+		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+		
+		$stmt = $mysqli->prepare("
+		SELECT id, age, color
+		FROM Iventlog
+		");
+		$stmt->bind_result($id, $age, $color);
+		$stmt->execute();
+		
+		$results = array();
+		
+		// tsükli sisu tehakse nii mitu korda, mitu rida'
+		// SQL laysega tuleb
+		while($stmt->fetch()) {
+			
+			$human = new StdClass();
+			$human->id = $id;
+			$human->age = $age;
+			$human->lightColor = $color;
+			
+			
+			//echo $color."<br>";
+			array_push($results, $human);
+			
+		}
+		return $results;
 		
 	}
 	
