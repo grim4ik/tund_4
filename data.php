@@ -5,6 +5,7 @@
 	//kui ei ole sisseloginud, suunan login lehele
 	if (!isset($_SESSION["userId"])) {
 		header("Location: login.php");
+		exit();
 	}
 	
 	
@@ -23,7 +24,10 @@
 		 !empty($_POST["age"]) &&
 		 !empty($_POST["color"]) 
 	) {
-		saveEvent($_POST["age"], $_POST["color"]);
+		
+		$color = cleanInput($_POST["color"]);
+		
+		saveEvent(cleanInput($_POST["age"]), $color);
 	}
 	
 	$people = getAllPeople();

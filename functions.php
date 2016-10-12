@@ -137,6 +137,22 @@
 		
 	}
 	
+	function cleanInput($input) {
+		
+		// input = " kirill ";
+		$input = trim($input);
+		// input = "kirill";
+		
+		// võtab välja
+		$input = stripslashes($input);
+		
+		// html asendab, nt "<" saab "$lt;"
+		$input = htmlspecialchars($input);
+		
+		return $input;
+		
+	}
+	
 	
 	
 	
